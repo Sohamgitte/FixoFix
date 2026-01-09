@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>QuickFix Pro | Elite Partner Terminal</title>
+  <title>FixoFixPro | Elite Partner Terminal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -123,7 +123,7 @@
 
   <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">
-      <a class="brand-logo" href="#"><i class="fas fa-screwdriver-wrench text-primary me-2"></i>QuickFix.</a>
+      <a class="brand-logo" href="#"><i class="fas fa-screwdriver-wrench text-primary me-2"></i>FixoFix</a>
       <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <i class="fas fa-bars text-white"></i>
       </button>
@@ -133,7 +133,7 @@
           <li class="nav-item"><a class="nav-link" href="notifications.html">New Jobs</a></li>
           <li class="nav-item"><a class="nav-link" href="earnings.html">Earnings</a></li>
           <li class="nav-item"><a class="nav-link" href="worker-dashboard.html">Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="worker-profile.html">Profile</a></li>
           <li class="nav-item"><a class="nav-link text-danger fw-800 ms-lg-4" href="index.html">LOGOUT</a></li>
         </ul>
       </div>
@@ -205,37 +205,46 @@
         </div>
 
         <div class="job-item">
-            <div class="d-flex align-items-center gap-4">
-                <div class="client-avatar">SR</div>
-                <div>
-                    <h5 class="fw-800 mb-1">Soham Gitte</h5>
-                    <p class="text-muted small m-0 fw-600"><i class="fas fa-location-dot me-2 text-primary"></i>Baner, Pune - Sector 04</p>
-                </div>
-            </div>
-            <div class="d-none d-lg-block">
-                <p class="stat-label m-0">Job Category</p>
-                <h6 class="fw-800 m-0">Elite AC Diagnostics</h6>
-            </div>
-            <div class="text-end">
-                <button class="btn-action-glow" onclick="generateOTP('1023')">Mark Arrived</button>
-            </div>
+    <div class="d-flex align-items-center gap-4">
+        <div class="client-avatar">SR</div>
+        <div>
+            <h5 class="fw-800 mb-1">Soham Gitte</h5>
+            <p class="text-muted small m-0 fw-600"><i class="fas fa-location-dot me-2 text-primary"></i>Pune</p>
         </div>
-
+    </div>
+ <div class="d-none d-lg-block">
+                <p class="stat-label m-0">Service</p>
+                <h6 class="fw-800 m-0">Plumber</h6>
+            </div>
+    <div class="text-end d-flex flex-column gap-2" style="min-width: 180px;">
+        <button class="btn btn-outline-primary rounded-pill fw-800 py-2" data-bs-toggle="modal" data-bs-target="#workerNegotiationModal">
+            <i class="fas fa-handshake me-2"></i>Negotiate
+        </button>
+        <button class="btn-action-glow py-2" onclick="generateOTP('1023')">
+            Mark Arrived
+        </button>
+    </div>
+</div>
         <div class="job-item">
             <div class="d-flex align-items-center gap-4">
                 <div class="client-avatar" style="background: #7c3aed;">RS</div>
                 <div>
-                    <h5 class="fw-800 mb-1">Riya Sharma</h5>
-                    <p class="text-muted small m-0 fw-600"><i class="fas fa-location-dot me-2 text-primary"></i>Shivaji Nagar, Pune - Lane 02</p>
+                    <h5 class="fw-800 mb-1">Swanand Raut</h5>
+                    <p class="text-muted small m-0 fw-600"><i class="fas fa-location-dot me-2 text-primary"></i>Aurangabad</p>
                 </div>
             </div>
             <div class="d-none d-lg-block">
-                <p class="stat-label m-0">Job Category</p>
-                <h6 class="fw-800 m-0">Master Electrical Fix</h6>
+                <p class="stat-label m-0">Service</p>
+                <h6 class="fw-800 m-0">Electrician</h6>
             </div>
-            <div class="text-end">
-                <button class="btn-action-glow" onclick="generateOTP('0987')">Mark Arrived</button>
-            </div>
+
+            <div class="text-end d-flex flex-column gap-2" style="min-width: 180px;">
+        <button class="btn btn-outline-primary rounded-pill fw-800 py-2" data-bs-toggle="modal" data-bs-target="#workerNegotiationModal">
+            <i class="fas fa-handshake me-2"></i>Negotiate
+        </button>
+        <button class="btn-action-glow py-2" onclick="generateOTP('1023')">
+            Mark Arrived
+        </button>
         </div>
     </div>
   </div>
@@ -254,6 +263,34 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="workerNegotiationModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 p-4" style="border-radius: 40px; box-shadow: 0 40px 80px rgba(0,0,0,0.2);">
+      <div class="modal-header border-0 pb-0">
+        <h3 class="fw-800">Bid Terminal</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="p-3 mb-4 rounded-4 text-center" style="background: #f8fafc; border: 2px dashed #e2e8f0;">
+            <p class="small fw-800 text-muted mb-1 text-uppercase">Customer's Counter Offer</p>
+            <h2 class="fw-900 text-primary mb-0">₹480</h2>
+        </div>
+        <div class="mb-4">
+            <label class="fw-800 small text-muted mb-2">SEND YOUR COUNTER (₹)</label>
+            <input type="number" class="form-control form-control-lg fw-800 text-center" placeholder="550" style="border-radius: 20px; height: 70px; font-size: 1.5rem; border: 2px solid #e2e8f0;">
+        </div>
+        <div class="row g-2">
+            <div class="col-6">
+                <button class="btn btn-primary w-100 py-3 rounded-4 fw-800" onclick="alert('Counter-bid sent to customer!')">SEND BID</button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-success w-100 py-3 rounded-4 fw-800" onclick="alert('Handshake Successful! Price locked at ₹480')">ACCEPT</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>

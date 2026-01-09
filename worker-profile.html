@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FixoFix | Partner Terminal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root { --brand: #1d4ed8; --dark: #0f172a; --bg: #f8fafc; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--dark); }
+
+    /* Theme Header */
+    .profile-bg { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); height: 250px; border-radius: 0 0 60px 60px; }
+    
+    .main-card { margin-top: -120px; background: white; border-radius: 40px; padding: 40px; border: 1px solid #f1f5f9; box-shadow: 0 40px 100px rgba(0,0,0,0.08); }
+
+    /* Profile Photo Edit */
+    .photo-container { position: relative; width: 160px; height: 160px; margin: 0 auto 20px; }
+    .worker-photo { width: 100%; height: 100%; border-radius: 45px; object-fit: cover; border: 6px solid white; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+    .edit-overlay { position: absolute; bottom: 5px; right: 5px; background: var(--brand); color: white; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 3px solid white; }
+
+    /* Bento Stats */
+    .bento-stat { background: #f8fafc; padding: 20px; border-radius: 25px; border: 1px solid #eff6ff; text-align: center; transition: 0.3s; }
+    .bento-stat:hover { border-color: var(--brand); transform: translateY(-5px); }
+    .bento-stat h3 { font-weight: 800; color: var(--brand); margin: 0; }
+    .bento-stat p { font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin: 0; }
+
+    /* Luxury Form Inputs */
+    .luxury-input { border-radius: 15px; border: 1.5px solid #e2e8f0; padding: 12px 18px; font-weight: 600; background: #f8fafc; transition: 0.3s; }
+    .luxury-input:focus { border-color: var(--brand); background: white; box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.1); }
+    .luxury-input:disabled { background: #f1f5f9; border-style: dashed; color: #64748b; }
+
+    .tag-badge { background: #eff6ff; color: var(--brand); padding: 6px 15px; border-radius: 100px; font-weight: 700; font-size: 0.8rem; display: inline-block; margin: 3px; border: 1px solid #dbeafe; }
+
+    .btn-save { background: var(--brand); color: white; border-radius: 18px; padding: 15px; font-weight: 800; border: none; width: 100%; display: none; }
+    .edit-mode-active .btn-save { display: block; }
+    .edit-mode-active .btn-edit-trigger { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="profile-bg">
+    <div class="container pt-4">
+        <div class="d-flex justify-content-between align-items-center bg-white bg-opacity-10 p-3 rounded-4 backdrop-blur">
+            <a href="worker-home.html" class="text-white text-decoration-none fw-bold small"><i class="fas fa-chevron-left"></i> BACK</a>
+            <span class="text-white small fw-800">PARTNER ID: QF-772</span>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="main-card mx-auto" id="profileWrapper" style="max-width: 950px;">
+        <div class="row g-5">
+            <div class="col-lg-4 text-center border-end">
+                <div class="photo-container">
+                    <img id="p-img" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400" class="worker-photo">
+                    <label for="file-in" class="edit-overlay"><i class="fas fa-camera"></i></label>
+                    <input type="file" id="file-in" hidden onchange="preview(event)">
+                </div>
+                
+                <h4 class="fw-800 mb-1" id="h-name">Rahul Sharma</h4>
+                <p class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1 fw-800 small mb-4">MASTER TECHNICIAN</p>
+
+                <div class="row g-2 mb-4">
+                    <div class="col-6"><div class="bento-stat"><h3>4.9</h3><p>Rating</p></div></div>
+                    <div class="col-6"><div class="bento-stat"><h3>142</h3><p>Jobs</p></div></div>
+                    <div class="col-12"><div class="bento-stat"><h3>₹8.2k</h3><p>Earnings</p></div></div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-800">Terminal Settings</h5>
+                    <button class="btn btn-dark btn-sm rounded-pill px-4 fw-800 btn-edit-trigger" onclick="toggleEdit()">
+                        <i class="fas fa-pen-nib me-2"></i> EDIT PROFILE
+                    </button>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="small fw-800 text-muted mb-1">PARTNER NAME</label>
+                        <input type="text" class="form-control luxury-input" id="in-name" value="Rahul Sharma" disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small fw-800 text-muted mb-1">CONTACT NUMBER</label>
+                        <input type="text" class="form-control luxury-input" value="+91 88223 34455" disabled>
+                    </div>
+                    <div class="col-12">
+                        <label class="small fw-800 text-muted mb-1">BIO & SERVICES</label>
+                        <textarea class="form-control luxury-input" rows="3" disabled>Specialist in HVAC and Smart Home Electricals. 6 years experience.</textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small fw-800 text-muted mb-1">BASE CATEGORY</label>
+                        <select class="form-select luxury-input" disabled>
+                            <option>Electrician</option>
+                            <option>Plumber</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small fw-800 text-muted mb-1">SERVICE RADIUS (KM)</label>
+                        <input type="number" class="form-control luxury-input" value="10" disabled>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <p class="small fw-800 text-muted mb-2">VERIFIED SKILLS</p>
+                    <span class="tag-badge">Wiring</span> <span class="tag-badge">AC Repair</span> <span class="tag-badge">Phase Logic</span>
+                </div>
+
+                <button class="btn-save mt-4" onclick="save()">SAVE TERMINAL DATA</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleEdit() {
+        document.getElementById('profileWrapper').classList.add('edit-mode-active');
+        document.querySelectorAll('.luxury-input').forEach(i => i.disabled = false);
+    }
+
+    function save() {
+        const btn = document.querySelector('.btn-save');
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> SYNCING...';
+        
+        setTimeout(() => {
+            document.getElementById('profileWrapper').classList.remove('edit-mode-active');
+            document.querySelectorAll('.luxury-input').forEach(i => i.disabled = true);
+            document.getElementById('h-name').innerText = document.getElementById('in-name').value;
+            btn.innerHTML = 'SAVE TERMINAL DATA';
+            alert("Elite Profile Updated! 🚀");
+        }, 1200);
+    }
+
+    function preview(e) {
+        const reader = new FileReader();
+        reader.onload = () => document.getElementById('p-img').src = reader.result;
+        reader.readAsDataURL(e.target.files[0]);
+    }
+</script>
+</body>
+</html>

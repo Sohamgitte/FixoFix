@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuickFix | Elite Dashboard</title>
+<title>FixoFix | Elite Dashboard</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -58,7 +58,7 @@
 <body>
 
 <div class="sidebar">
-  <h2 class="fw-800 mb-5"><i class="fas fa-screwdriver-wrench text-primary me-2"></i>QuickFix.</h2>
+  <h2 class="fw-800 mb-5"><i class="fas fa-screwdriver-wrench text-primary me-2"></i>FixoFix</h2>
   <nav>
     <a href="customer-home.html" class="nav-item-elite active"><i class="fas fa-home"></i> Home </a>
     <a href="booking-history.html" class="nav-item-elite"><i class="fas fa-history"></i> History</a>
@@ -124,10 +124,14 @@
             <button class="btn btn-light rounded-pill px-4 btn-call" id="call-btn" disabled><i class="fas fa-phone"></i></button>
             <button class="btn btn-light rounded-pill px-4 btn-msg" id="msg-btn" disabled><i class="fas fa-comment"></i></button>
         </div>
-
-        <button id="verify-btn" class="btn-verify-elite" data-bs-toggle="modal" data-bs-target="#otpModal" disabled>
+        <button id="verify-btn" class="btn-verify-elite rounded-pill w-100 fw-800 mb-2" data-bs-toggle="modal" data-bs-target="#otpModal" disabled>
             VERIFY OTP CHECK-IN
         </button>
+
+        <button id="negotiate-btn" class="btn btn-outline-primary rounded-pill w-100 fw-800 mb-2" data-bs-toggle="modal" data-bs-target="#priceNegotiationModal" disabled>
+          <i class="fas fa-handshake me-2"></i> NEGOTIATE PRICE
+        </button>
+        
       </div>
     </div>
   </div>
@@ -141,7 +145,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body text-center">
-        <p class="text-muted mb-4">Enter the code: <strong id="otp-hint">123456</strong></p>
+        <p class="text-muted mb-4">Enter the six digit code: <strong id="otp-hint"></strong></p>
         <input type="text" id="customer-otp" class="form-control form-control-lg text-center fw-800" 
                placeholder="· · · · · ·" maxlength="6" 
                style="border-radius: 20px; font-size: 2.5rem; letter-spacing: 12px; background: #f8fafc; border: 2px solid #e2e8f0; height: 80px;">
@@ -152,20 +156,45 @@
   </div>
 </div>
 
+<div class="modal fade" id="priceNegotiationModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 p-4" style="border-radius: 40px; box-shadow: 0 40px 80px rgba(0,0,0,0.2);">
+      <div class="modal-header border-0 pb-0">
+        <h3 class="fw-800">Elite Negotiation</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="p-3 mb-4 rounded-4 text-center" style="background: #eff6ff; border: 2px dashed #1d4ed8;">
+            <p class="small fw-800 text-muted mb-1 text-uppercase">Worker's Estimate Range</p>
+            <h2 class="fw-900 text-primary mb-0">₹500 - ₹550</h2>
+        </div>
+        <div class="mb-4">
+            <label class="fw-800 small text-muted mb-2">YOUR COUNTER OFFER (₹)</label>
+            <input type="number" id="customer-bid" class="form-control form-control-lg fw-800 text-center" placeholder="Enter amount" style="border-radius: 20px; background: #f8fafc; border: 2px solid #e2e8f0; height: 70px; font-size: 1.5rem;">
+        </div>
+        <div class="row g-2">
+            <div class="col-6"><button class="btn btn-dark w-100 py-3 rounded-4 fw-800" data-bs-dismiss="modal">REJECT</button></div>
+            <div class="col-6"><button class="btn btn-primary w-100 py-3 rounded-4 fw-800" onclick="confirmBid()">CONFIRM BID</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 // 🔥 NEW: DEMO SIMULATION LOGIC
 function runDemoSimulation() {
     document.querySelector("#customer-name").textContent = "Demo Member";
-    document.querySelector("#booking-id").textContent = "BK-DEMO-99";
-    document.querySelector("#service-request").textContent = "Premium Electrician";
+    document.querySelector("#booking-id").textContent = "QF-DEMO-99";
+    document.querySelector("#service-request").textContent = "Plumber";
     
     // Activate Map & Status
     document.getElementById('step-accepted').classList.add('active');
     document.getElementById('mapSection').style.display = 'block';
     
     // Expert Data
-    document.querySelector("#worker-name").textContent = "Rahul Sharma (Elite)";
+    document.querySelector("#worker-name").textContent = "Gaurav Kamble";
     document.getElementById("verify-btn").disabled = false;
     document.getElementById("call-btn").disabled = false;
     document.getElementById("msg-btn").disabled = false;
@@ -173,6 +202,18 @@ function runDemoSimulation() {
     // Set OTP
     window.currentOtp = "123456";
     alert("🚀 Demo mode active: Map is now visible and Expert is assigned!");
+}
+
+function confirmBid() {
+    const bidValue = document.getElementById('customer-bid').value;
+    if(bidValue) {
+        document.getElementById('live-negotiation-price').textContent = bidValue;
+        const msgContainer = document.getElementById('chat-messages');
+        const offerMsg = `<div class="d-flex flex-column align-items-end mb-3"><div class="chat-bubble-user p-3 shadow-sm small fw-600">I offer ₹${bidValue} for this job.</div></div>`;
+        msgContainer.insertAdjacentHTML('beforeend', offerMsg);
+        alert("💎 Bid of ₹" + bidValue + " sent to Gaurav. Open chat to see!");
+        bootstrap.Modal.getInstance(document.getElementById('priceNegotiationModal')).hide();
+    }
 }
 
 async function fetchLatestBooking() {
@@ -202,15 +243,21 @@ function verifyOTP() {
   const enteredOtp = document.getElementById("customer-otp").value.trim();
   const statusEl = document.getElementById("otp-status");
 
-  if (window.currentOtp && enteredOtp == window.currentOtp) {
+  // 🔥 MASTER BYPASS: Ab koi bhi OTP success dikhayega
+  if (enteredOtp.length === 6) { 
     statusEl.innerHTML = '<div class="alert alert-success rounded-4 fw-bold">✅ CHECK-IN SUCCESSFUL</div>';
     document.getElementById('step-arrived').classList.add('active');
+    
+    // Smooth Transition to Home or Hide Modal
     setTimeout(() => {
-        const modal = bootstrap.Modal.getInstance(document.getElementById("otpModal"));
+        const modalElement = document.getElementById("otpModal");
+        const modal = bootstrap.Modal.getInstance(modalElement);
         modal.hide();
-    }, 2000);
+        alert("Service has been activated successfully!");
+    }, 1500);
   } else {
-    statusEl.innerHTML = '<div class="alert alert-danger rounded-4 fw-bold">❌ INVALID OTP CODE</div>';
+    // Agar 6 digit se kam hai tabhi error dega
+    statusEl.innerHTML = '<div class="alert alert-warning rounded-4 fw-bold">⚠️ ENTER 6 DIGIT CODE</div>';
   }
 }
 

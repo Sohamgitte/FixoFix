@@ -1,91 +1,186 @@
-<div id="approvalOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none" style="background: rgba(255, 255, 255, 0.95); z-index: 9999; backdrop-filter: blur(20px);">
-  <div class="position-absolute top-50 start-50 translate-middle w-100 px-4" style="max-width: 500px;">
-    
-    <div class="p-5 shadow-2xl" style="background: #ffffff; border: 2px solid #000; border-radius: 0 !important;">
-      
-      <div class="d-flex align-items-center gap-4 mb-5 border-bottom pb-4">
-         <div style="width: 70px; height: 70px; background: #f1f5f9; border: 1px solid #eee; display: flex; align-items: center; justify-content: center;">
-            <i class="fas fa-user-gear fa-2x text-primary"></i>
-         </div>
-         <div class="text-start">
-            <h5 class="fw-900 text-dark m-0 text-uppercase" id="workerName" style="letter-spacing: 1px;">Partner: Rahul Sharma</h5>
-            <span class="badge bg-dark text-white extra-small mt-1" style="border-radius: 0;">ID: QFX-8829</span>
-         </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>QuickFix | Elite Partner Fleet</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* --- Pehle wala saara CSS wahi hai --- */
+    :root { --brand: #1d4ed8; --brand-soft: #eff6ff; --body-bg: #f8fafc; --text-main: #0f172a; --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.04); }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--body-bg); color: var(--text-main); margin: 0; }
+    .hero-nav { background: linear-gradient(135deg, var(--brand), #1e40af); padding: 60px 0 120px; color: white; text-align: center; position: relative; }
+    .navbar-simple { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: absolute; top: 0; width: 100%; }
+    .back-link { color: white; text-decoration: none; font-weight: 700; font-size: 14px; padding: 10px 20px; border-radius: 12px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); transition: 0.3s; }
+    .hero-title { font-size: 2.8rem; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 10px; }
+    .hero-sub { opacity: 0.8; font-weight: 500; font-size: 1.1rem; }
+    .filter-wrapper { margin-top: -60px; position: relative; z-index: 10; }
+    .filter-box { background: white; padding: 30px 40px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,0.8); }
+    .form-label { font-weight: 800; color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+    .form-select { border-radius: 15px; padding: 14px 20px; border: 2px solid #f1f5f9; font-weight: 700; transition: 0.3s; }
+    .card-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; padding: 50px 0; }
+    .worker-card { background: #ffffff; border-radius: 32px; padding: 35px; box-shadow: var(--card-shadow); transition: all 0.5s; border: 1px solid #f1f5f9; position: relative; }
+    .worker-card:hover { transform: translateY(-12px); border-color: var(--brand); }
+    .badge-status { position: absolute; top: 35px; right: 35px; background: #dcfce7 !important; color: #16a34a !important; font-weight: 800; padding: 6px 14px; border-radius: 100px; font-size: 10px; }
+    .worker-title { font-weight: 800; font-size: 1.4rem; margin-bottom: 20px; }
+    .worker-info p { margin-bottom: 12px; font-weight: 600; color: #64748b; display: flex; align-items: center; gap: 12px; }
+    .worker-info i { color: var(--brand); }
+    .assign-btn { background: var(--brand); color: white; padding: 16px; font-weight: 800; border-radius: 18px; width: 100%; border: none; margin-top: 20px; transition: 0.4s; }
+
+    /* --- 🆕 Modal & Table Styling --- */
+    .modal-content { border-radius: 35px; border: none; overflow: hidden; }
+    .modal-header { background: var(--brand); color: white; padding: 25px 40px; }
+    .modal-title { font-weight: 800; letter-spacing: -1px; }
+    .customer-table { margin-top: 20px; }
+    .customer-table thead { background: #f8fafc; }
+    .customer-table th { font-weight: 800; color: #94a3b8; font-size: 12px; text-transform: uppercase; border: none; padding: 15px; }
+    .customer-table td { font-weight: 700; color: var(--text-main); vertical-align: middle; padding: 15px; border-bottom: 1px solid #f1f5f9; }
+    .btn-action { padding: 8px 16px; border-radius: 12px; font-weight: 800; font-size: 12px; border: none; transition: 0.2s; }
+    .btn-confirm { background: #dcfce7; color: #16a34a; }
+    .btn-confirm:hover { background: #16a34a; color: white; }
+    .btn-reject { background: #fee2e2; color: #dc2626; }
+    .btn-reject:hover { background: #dc2626; color: white; }
+  </style>
+</head>
+<body>
+
+  <div class="hero-nav">
+    <nav class="navbar-simple">
+      <a class="back-link" href="admin-dashboard.html"><i class="fas fa-chevron-left me-2"></i> Dashboard</a>
+      <span class="fw-800 fs-5"><i class="fa-solid fa-screwdriver-wrench me-2"></i>QuickFix Admin</span>
+    </nav>
+    <div class="container">
+      <h1 class="hero-title">Active Partner Fleet</h1>
+      <p class="hero-sub">Assign live service requests to verified workers</p>
+    </div>
+  </div>
+
+  <div class="container filter-wrapper">
+    <div class="filter-box">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <label class="form-label">Specialization</label>
+          <select id="serviceSelect" class="form-select"><option value="">— Show All —</option></select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Operations City</label>
+          <select id="citySelect" class="form-select"><option value="">— Show All —</option></select>
+        </div>
       </div>
-
-      <div class="text-start mb-5">
-         <p class="text-muted extra-small fw-800 text-uppercase mb-1" style="letter-spacing: 2px;">Session Brief</p>
-         <h4 class="fw-900 text-dark" id="serviceType">HVAC Precision Maintenance</h4>
-         <p class="text-muted small fw-600 m-0">Includes grid diagnostics, filter sterilization, and pressure audit.</p>
-      </div>
-
-      <div class="p-4 mb-5 text-center" style="background: #f8fafc; border: 1px dashed #3b82f6;">
-         <span class="text-muted small fw-800 text-uppercase d-block mb-1">Total Settlement Due</span>
-         <h1 class="display-3 fw-900 text-dark m-0" id="finalPrice" style="letter-spacing: -4px;">₹1,450</h1>
-      </div>
-
-      <div class="text-start mb-4">
-         <p class="text-muted extra-small fw-800 text-uppercase mb-3" style="letter-spacing: 2px;">Select Payment Protocol</p>
-         <div class="d-grid gap-3">
-            
-            <button onclick="handleUPIPayment()" class="btn btn-primary py-3 fw-900 d-flex align-items-center justify-content-between px-4 rounded-0 shadow-lg">
-               <span>PAY VIA UPI (GPay/PhonePe)</span>
-               <i class="fas fa-mobile-screen-button"></i>
-            </button>
-
-            <button onclick="handleCashPayment()" class="btn btn-outline-dark py-3 fw-900 d-flex align-items-center justify-content-between px-4 rounded-0">
-               <span>SETTLE VIA CASH</span>
-               <i class="fas fa-hand-holding-dollar"></i>
-            </button>
-            
-         </div>
-      </div>
-
-      <button onclick="closeApproval()" class="btn btn-link text-danger fw-800 extra-small text-decoration-none w-100">REPORT INACCURATE BILLING</button>
     </div>
 
+    <div class="card-list" id="workerCards"></div>
   </div>
-</div>
 
-<script>
-  // Simulation: Ye data worker side se aayega
-  function openSettlementNode(name, service, amount) {
-    document.getElementById('workerName').innerText = 'Partner: ' + name;
-    document.getElementById('serviceType').innerText = service;
-    document.getElementById('finalPrice').innerText = '₹' + amount;
-    
-    document.getElementById('approvalOverlay').classList.remove('d-none');
-    gsap.from("#approvalOverlay div", { opacity: 0, y: 30, duration: 0.6, ease: "power4.out" });
-  }
+  <div class="modal fade" id="assignModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-tasks me-2"></i> Assign Pending Requests</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="alert alert-primary rounded-4 border-0 mb-4">
+            <i class="fas fa-info-circle me-2"></i> Currently viewing active requests for <strong><span id="targetWorkerName"></span></strong> (ID: <span id="targetWorkerId"></span>)
+          </div>
+          <div class="table-responsive">
+            <table class="table customer-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Contact</th>
+                  <th>Service Required</th>
+                  <th>Location</th>
+                  <th>Schedule</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="requestTableBody">
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  // UPI Logic: Ye seedha UPI Apps trigger karega
-  function handleUPIPayment() {
-    const amount = document.getElementById('finalPrice').innerText.replace('₹', '');
-    const upiID = "quickfix@upi"; // Tera ya Admin ka UPI ID
-    const name = "QuickFix Admin";
-    
-    // Deep Link URL for UPI
-    const upiUrl = `upi://pay?pa=${upiID}&pn=${name}&am=${amount}&cu=INR`;
-    
-    window.location.href = upiUrl; // Mobile par apps khol dega
-    
-    setTimeout(() => {
-        alert("Payment Syncing with Admin Node... Transaction Logged.");
-        closeApproval();
-    }, 2000);
-  }
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const workers = [
+      {id:201, name:'Gaurav Kamble',   service:'Plumber',    city:'Pune',     active:true},
+      {id:203, name:'Swanand Raut',    service:'Electrician',city:'Aurangabad',active:true},
+      {id:207, name:'Soham Gitte',     service:'Electrician',city:'Thane',    active:true},
+      {id:209, name:'Mehul Jadhav',    service:'Plumber',    city:'Parbhani', active:true},
+    ];
 
-  // Cash Logic: Admin ko confirmation
-  function handleCashPayment() {
-    const amount = document.getElementById('finalPrice').innerText;
-    alert(`Cash Protocol Triggered. Requesting Admin Verification for ${amount}. Session will terminate after physical handover.`);
-    // Yahan tera API call admin ko message bhejega
-    closeApproval();
-  }
+    const pendingRequests = [
+      {id: 'REQ001', name: 'Rahul Deshmukh', phone: '+91 98XXX XXX01', service: 'Plumber', address: 'Baner, Pune', time: '10:00 AM'},
+      {id: 'REQ002', name: 'Soham Gitte', phone: '+91 88XXX XXX22', service: 'Electrician', address: 'Thane West', time: '11:30 AM'},
+      {id: 'REQ003', name: 'Swanand Raut', phone: '+91 77XXX XXX33', service: 'Electrician', address: 'Station Road', time: '02:00 PM'},
+      {id: 'REQ004', name: 'Pooja Patil', phone: '+91 95XXX XXX44', service: 'Cleaner', address: 'Nashik Central', time: '09:00 AM'},
+      {id: 'REQ005', name: 'Amit Sharma', phone: '+91 82XXX XXX55', service: 'Painter', address: 'Salt Lake, Kolkata', time: '12:00 PM'}
+    ];
 
-  function closeApproval() {
-    document.getElementById('approvalOverlay').classList.add('d-none');
-  }
+    const workerCardsContainer = document.getElementById('workerCards');
 
-  // For Demo: Run openSettlementNode('Rahul Sharma', 'HVAC Elite Service', '1450')
-</script>
+    function renderWorkers() {
+      workerCardsContainer.innerHTML = '';
+      workers.forEach(w => {
+        const card = document.createElement('div');
+        card.className = 'worker-card';
+        card.innerHTML = `
+          <span class="badge badge-status">Online Now</span>
+          <h5 class="worker-title">${w.name}</h5>
+          <div class="worker-info">
+            <p><i class="fas fa-id-card-clip"></i> ID: ${w.id}</p>
+            <p><i class="fas fa-screwdriver-wrench"></i> Skill: ${w.service}</p>
+            <p><i class="fas fa-location-dot"></i> ${w.city}</p>
+          </div>
+          <button class="assign-btn" onclick="openAssignModal(${w.id}, '${w.name}')">
+            <i class="fas fa-user-check me-2"></i> Assign To Job
+          </button>
+        `;
+        workerCardsContainer.appendChild(card);
+      });
+    }
+
+    function openAssignModal(id, name) {
+      document.getElementById('targetWorkerId').innerText = id;
+      document.getElementById('targetWorkerName').innerText = name;
+      
+      const tbody = document.getElementById('requestTableBody');
+      tbody.innerHTML = '';
+
+      pendingRequests.forEach(req => {
+        const row = `
+          <tr>
+            <td><strong>${req.name}</strong><br><small class="text-muted">ID: ${req.id}</small></td>
+            <td>${req.phone}</td>
+            <td><span class="badge bg-primary-subtle text-primary rounded-pill px-3">${req.service}</span></td>
+            <td>${req.address}</td>
+            <td>Today, ${req.time}</td>
+            <td>
+              <button class="btn-action btn-confirm me-2" onclick="finalize('${req.name}', '${name}')">Assign</button>
+              <button class="btn-action btn-reject" onclick="this.closest('tr').remove()">Reject</button>
+            </td>
+          </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', row);
+      });
+
+      new bootstrap.Modal(document.getElementById('assignModal')).show();
+    }
+
+    function finalize(cust, worker) {
+      alert(`Handshake Initialized! ${worker} has been assigned to ${cust}.`);
+      bootstrap.Modal.getInstance(document.getElementById('assignModal')).hide();
+    }
+
+    renderWorkers();
+  </script>
+</body>
+</html>
