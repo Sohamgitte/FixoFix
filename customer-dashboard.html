@@ -189,19 +189,21 @@ function runDemoSimulation() {
     document.querySelector("#booking-id").textContent = "QF-DEMO-99";
     document.querySelector("#service-request").textContent = "Plumber";
     
-    // Activate Map & Status
+    // Status aur Map activate karo
     document.getElementById('step-accepted').classList.add('active');
     document.getElementById('mapSection').style.display = 'block';
     
-    // Expert Data
+    // Expert details aur Buttons ON karo
     document.querySelector("#worker-name").textContent = "Gaurav Kamble";
     document.getElementById("verify-btn").disabled = false;
     document.getElementById("call-btn").disabled = false;
     document.getElementById("msg-btn").disabled = false;
     
-    // Set OTP
+    // 🔥 YE FIX HAI: Negotiate button enable karo
+    document.getElementById("negotiate-btn").disabled = false;
+    
     window.currentOtp = "123456";
-    alert("🚀 Demo mode active: Map is now visible and Expert is assigned!");
+    alert("🚀 FixoFix Demo Active: Price Negotiation and Expert Tracking Unlocked!");
 }
 
 function confirmBid() {
